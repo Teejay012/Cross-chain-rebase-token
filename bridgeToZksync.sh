@@ -27,9 +27,12 @@ echo "Compiling and deploying the Rebase Token contract on ZKsync..."
 ZKSYNC_REBASE_TOKEN_ADDRESS=$(forge create src/RebaseToken.sol:RebaseToken --rpc-url ${ZKSYNC_SEPOLIA_RPC_URL} --account sepolia --legacy --zksync | awk '/Deployed to:/ {print $3}')
 echo "ZKsync rebase token address: $ZKSYNC_REBASE_TOKEN_ADDRESS"
 
-# Deployer: 0x186159375129Bc6ae88dA802977FdA3D2A6f80d3
-# Deployed to: 0xAE6fb87a7cd4Ee61A38D2F0b0c3d9285b12Ebda2
-# Transaction hash: 0xbf59130cef28b0c30a9ba6b8868497d511039cfc08d5f9da6485f74e8060e850
+# rebaseToken: contract RebaseToken 0x8428fb2629Ad946255613B62B87E471f947ae7ee
+# rebaseTokenPool: contract RebaseTokenPool 0xD325d3F4ca459d6413E1a0D15d862b354D215a61
+# vault: contract Vault 0x67e395a475A68B582Cc52C9367F6C4eDd2ac94e9
+# ZK token Deployed to: 0xe6F7B4610C88F5d0bAD2D019801FEe2A83f7D0D7
+# ZK pool Deployer: 0x186159375129Bc6ae88dA802977FdA3D2A6f80d3
+# ZK pool Deployed to: 0xF8EbD44f8aEf3f89e0139feB3E1EA3691E714e50
 
 # Compile and deploy the pool contract
 echo "Compiling and deploying the pool contract on ZKsync..."
@@ -82,6 +85,8 @@ forge script ./script/ConfigurePool.s.sol:ConfigurePoolScript --rpc-url ${SEPOLI
 # Deposit funds to the vault
 echo "Depositing funds to the vault on Sepolia..."
 cast send ${VAULT_ADDRESS} --value ${AMOUNT} --rpc-url ${SEPOLIA_RPC_URL} --account sepolia "deposit()"
+
+# forge script ./script/ConfigurePool.s.sol:ConfigurePoolScript --rpc-url $SEPOLIA_RPC_URL --account sepolia --broadcast --sig "run(address,uint64,address,address,bool,uint128,uint128,bool,uint128,uint128)" 0xD325d3F4ca459d6413E1a0D15d862b354D215a61 
 
 # Wait a beat for some interest to accrue
 
